@@ -894,6 +894,8 @@ class tzical(object):
                         tzid = value
                     elif name in ("TZURL", "LAST-MODIFIED", "COMMENT"):
                         pass
+                    elif name.startswith("X-"):
+                        pass
                     else:
                         raise ValueError("unsupported property: "+name)
             elif name == "BEGIN" and value == "VTIMEZONE":
