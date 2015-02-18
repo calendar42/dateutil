@@ -786,7 +786,8 @@ class tzical(object):
     def _parse_rfc(self, s):
         lines = s.splitlines()
         if not lines:
-            raise ValueError("empty string")
+            #raise ValueError("empty string")
+            return
 
         # Unfold
         i = 0
@@ -805,14 +806,18 @@ class tzical(object):
         invtz = False
         comptype = None
         for line in lines:
-            if not line:
+            if not line or not(':' in line):
                 continue
+
             name, value = line.split(':', 1)
+
             parms = name.split(';')
             if not parms:
                 raise ValueError("empty property name")
+
             name = parms[0].upper()
             parms = parms[1:]
+
             if invtz:
                 if name == "BEGIN":
                     if value in ("STANDARD", "DAYLIGHT"):
@@ -831,7 +836,9 @@ class tzical(object):
                         if comptype:
                             raise ValueError("component not closed: "+comptype)
                         if not tzid:
-                            raise ValueError("mandatory TZID not found")
+                            #Use empty tzid
+                            tzid = ''
+                            #raise ValueError("mandatory TZID not found")
                         if not comps:
                             raise ValueError(
                                 "at least one component is needed")
